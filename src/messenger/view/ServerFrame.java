@@ -29,8 +29,8 @@ public class ServerFrame extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.setTitle("Messenger");
-		this.setSize(550, 300);
-		this.setMinimumSize(new Dimension(500, 250));
+		this.setSize(600, 300);
+		this.setMinimumSize(new Dimension(550, 250));
 		this.setLocationRelativeTo(null); // Centers the frame
 		
 		this.setJMenuBar(serverMenuBar);

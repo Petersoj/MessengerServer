@@ -58,7 +58,7 @@ public class ServerMenuBar extends JMenuBar {
 		this.serverStartItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				serverStartItem.setText("Stop Server");
 			}
 		});
 	}
