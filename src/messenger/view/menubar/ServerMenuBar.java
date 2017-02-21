@@ -9,6 +9,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import messenger.controller.DataController;
+import messenger.server.MessengerServer;
 import messenger.util.Utils;
 import messenger.view.ServerFrame;
 
@@ -58,7 +59,14 @@ public class ServerMenuBar extends JMenuBar {
 		this.serverStartItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				serverStartItem.setText("Stop Server");
+				MessengerServer messengerServer = serverFrame.getServerController().getMessengerServer();
+				if(serverStartItem.getText().startsWith("Start")){
+					messengerServer.startServer();
+					serverStartItem.setText("Stop Server");
+				}else{
+					messengerServer.stopServer();
+					serverStartItem.setText("Start Server");
+				}
 			}
 		});
 	}

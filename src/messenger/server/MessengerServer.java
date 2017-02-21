@@ -17,6 +17,9 @@ public class MessengerServer {
 		this.serverConnection.start();
 	}
 	
+	public void stopServer(){
+		this.serverConnection.closeServer();
+	}
 
 	public ServerController getServerController() {
 		return serverController;

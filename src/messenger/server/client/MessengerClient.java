@@ -8,13 +8,15 @@ import messenger.server.MessengerServer;
 public class MessengerClient {
 	
 	private static int currentClientID = 0;
+	
 	private MessengerServer messengerServer;
 	
 	private int clientID;
 	private ClientConnection clientConnection;
+	
 	private String userName;
 	private BufferedImage userImage;
-	private int messengerColorOrdinal;
+	private String messengerColorString;
 	
 	public MessengerClient(MessengerServer messengerServer){
 		this.messengerServer = messengerServer;
@@ -54,13 +56,13 @@ public class MessengerClient {
 	public void setUserImage(BufferedImage userImage) {
 		this.userImage = userImage;
 	}
-
-	public int getMessengerColorOrdinal() {
-		return messengerColorOrdinal;
+	
+	public String getMessengerColorString() {
+		return messengerColorString;
 	}
 
-	public void setMessengerColorOrdinal(int messengerColorOrdinal) {
-		this.messengerColorOrdinal = messengerColorOrdinal;
+	public void setMessengerColorString(String messengerColorString) {
+		this.messengerColorString = messengerColorString;
 	}
 
 	public MessengerServer getMessengerServer(){

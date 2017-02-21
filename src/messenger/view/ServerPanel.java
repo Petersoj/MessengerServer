@@ -60,7 +60,7 @@ public class ServerPanel extends JPanel {
 		this.userListLabel.setFont(dataController.getVerdanaFont().deriveFont(20f));
 		this.consoleLabel.setFont(dataController.getVerdanaFont().deriveFont(20f));
 		
-		this.consoleTextArea.setFont(dataController.getVerdanaFont());
+		this.consoleTextArea.setFont(dataController.getVerdanaFont().deriveFont(13f));
 		this.consoleTextArea.setLineWrap(true);
 		this.consoleTextArea.setWrapStyleWord(true);
 		this.consoleTextArea.setEditable(false);
@@ -114,7 +114,7 @@ public class ServerPanel extends JPanel {
 	}
 	
 	public void addMessageToConsole(String message){
-		
+		this.consoleTextArea.append(message);
 	}
 	
 	public void addUser(){

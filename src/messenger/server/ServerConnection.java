@@ -27,12 +27,15 @@ public class ServerConnection extends Thread {
 		}
 		
 		while(this.serverSocket != null && !this.serverSocket.isClosed() && this.serverSocket.isBound()){
+			System.out.println("wating inside");
 			try {
 				MessengerClient messengerClient = new MessengerClient(messengerServer);
-				this.messengerClients.add(messengerClient);
 				messengerClient.acceptConnection(serverSocket.accept());
+				this.messengerClients.add(messengerClient);
 			}catch(Exception e){
-				Debug.presentError("Server .accept", e);
+				if(!e.getMessage().equals("Socket closed")){
+					Debug.consoleLog(e);
+				}
 			}
 		}
 		this.closeServer();
@@ -53,7 +56,7 @@ public class ServerConnection extends Thread {
 				serverSocket.close();
 			}
 		}catch(Exception e){
-			Debug.presentError("Closing server", e);
+			Debug.consoleLog(e);
 		}
 	}
 	
