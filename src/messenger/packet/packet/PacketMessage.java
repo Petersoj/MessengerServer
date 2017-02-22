@@ -15,17 +15,20 @@ public class PacketMessage extends Packet {
 
 	public PacketMessage() {
 		super(PacketType.MESSAGE);
+		this.packetMessageType = PacketMessageType.MESSAGE;
+		this.message = "";
 	}
 	
 	public PacketMessage(PacketMessageType packetMessageType) {
 		super(PacketType.MESSAGE);
 		this.packetMessageType = packetMessageType;
+		this.message = "";
 	}
 	
 	@Override
 	public void writeContent(DataOutputStream dataOutputStream) throws IOException{
 		super.writeContent(dataOutputStream);
-		dataOutputStream.writeUTF(packetMessageType.toString());
+		dataOutputStream.writeUTF(packetMessageType.name());
 		
 		dataOutputStream.writeInt(userID);
 		if(packetMessageType == PacketMessageType.MESSAGE){

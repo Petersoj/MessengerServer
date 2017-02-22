@@ -27,7 +27,6 @@ public class ServerConnection extends Thread {
 		}
 		
 		while(this.serverSocket != null && !this.serverSocket.isClosed() && this.serverSocket.isBound()){
-			System.out.println("wating inside");
 			try {
 				MessengerClient messengerClient = new MessengerClient(messengerServer);
 				messengerClient.acceptConnection(serverSocket.accept());
@@ -35,6 +34,7 @@ public class ServerConnection extends Thread {
 			}catch(Exception e){
 				if(!e.getMessage().equals("Socket closed")){
 					Debug.consoleLog(e);
+					this.closeServer();
 				}
 			}
 		}

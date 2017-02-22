@@ -13,7 +13,7 @@ public abstract class Packet {
 	}
 	
 	public void writeContent(DataOutputStream dataOutputStream) throws IOException{
-		dataOutputStream.writeUTF(packetType.toString());
+		dataOutputStream.writeUTF(packetType.name());
 	}
 	
 	public void readContent(DataInputStream dataInputStream) throws IOException{

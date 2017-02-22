@@ -48,6 +48,7 @@ public class ClientConnection extends Thread {
 				}
 			}catch(Exception e){
 				Debug.consoleLog(e);
+				this.closeConnection(); // Error happened and that should never happen ;)
 			}
 		}
 		this.closeConnection();
