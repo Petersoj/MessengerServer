@@ -15,36 +15,27 @@ public class PacketMessage extends Packet {
 
 	public PacketMessage() {
 		super(PacketType.MESSAGE);
-		this.packetMessageType = PacketMessageType.MESSAGE;
 		this.message = "";
 	}
 	
 	public PacketMessage(PacketMessageType packetMessageType) {
-		super(PacketType.MESSAGE);
+		this();
 		this.packetMessageType = packetMessageType;
-		this.message = "";
 	}
 	
 	@Override
 	public void writeContent(DataOutputStream dataOutputStream) throws IOException{
 		super.writeContent(dataOutputStream);
 		dataOutputStream.writeUTF(packetMessageType.name());
-		
 		dataOutputStream.writeInt(userID);
-		if(packetMessageType == PacketMessageType.MESSAGE){
-			dataOutputStream.writeUTF(message);
-		}
+		dataOutputStream.writeUTF(message);
 	}
 
 	@Override
 	public void readContent(DataInputStream dataInputStream) throws IOException{
-		super.readContent(dataInputStream);
 		this.packetMessageType = PacketMessageType.valueOf(dataInputStream.readUTF());
 		
-		this.userID = dataInputStream.readInt();
-		if(packetMessageType == PacketMessageType.MESSAGE){
-			this.message = dataInputStream.readUTF();
-		}
+		this.message = dataInputStream.readUTF();
 	}
 	
 	public PacketMessageType getPacketMessageType() {

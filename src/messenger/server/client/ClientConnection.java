@@ -73,5 +73,4 @@ public class ClientConnection extends Thread {
 			Debug.consoleLog(e);
 		}
 	}
-
 }
