@@ -60,15 +60,10 @@ public class ClientConnection extends Thread {
 				// !!! Order is Important !!!
 				this.sendPacket(userNamePacket);
 				this.sendPacket(userColorPacket);
-				this.sendPacket(userImagePacket); // Null here
+				//this.sendPacket(userImagePacket); // Null here
 			}
 		}
-		
-		PacketMessage message = new PacketMessage(PacketMessageType.MESSAGE);
-		message.setMessage("please work");
-		message.setUserID(0);
-		
-		this.sendPacket(message);
+
 		
 		while(socket != null && !socket.isClosed()){
 			try{
