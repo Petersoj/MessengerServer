@@ -33,7 +33,7 @@ public class Debug {
 		StackTraceElement[] stackTraceElements = e.getStackTrace();
 		String message = e.getClass().getName() + " - " + e.getMessage() + "\n\n";
 		for(int index = 0; index < stackTraceElements.length; index++){
-			if(index > 6){ // Don't wanna print to many lines :) && don't want an indexOutOfBoundsException
+			if(index > 10){ // Don't wanna print to many lines :) && don't want an indexOutOfBoundsException
 				break;
 			}
 			StackTraceElement stackTraceElement = stackTraceElements[index];
