@@ -2,19 +2,14 @@ package messenger.server.client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
-
-import javax.imageio.ImageIO;
 
 import messenger.controller.Debug;
 import messenger.packet.Packet;
 import messenger.packet.Packet.PacketType;
 import messenger.packet.PacketHandler;
 import messenger.packet.packet.PacketMessage;
-import messenger.packet.packet.PacketMessage.PacketMessageType;
 import messenger.packet.packet.PacketUser;
-import messenger.packet.packet.PacketUser.PacketUserType;
 
 public class ClientConnection extends Thread {
 	
@@ -40,32 +35,7 @@ public class ClientConnection extends Thread {
 			Debug.consoleLog(e);
 		}
 		
-		for(MessengerClient otherServerUser : messengerClient.getMessengerServer().getServerConnection().getMessengerClients()){
-			if(otherServerUser.getClientID() != messengerClient.getClientID()){
-				
-				PacketUser userNamePacket = new PacketUser(PacketUserType.USERNAME);
-				userNamePacket.setUserName(otherServerUser.getUserName());
-				
-				PacketUser userColorPacket = new PacketUser(PacketUserType.COLOR);
-				userColorPacket.setUserColor(otherServerUser.getUserColor());
-				
-				PacketUser userImagePacket = new PacketUser(PacketUserType.IMAGE_ICON);
-				//userImagePacket.setUserImage(otherServerUser.getUserImage());
-				try {
-					userImagePacket.setUserImage(ImageIO.read(getClass().getResourceAsStream("/messenger/controller/sig.png")));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				// !!! Order is Important !!!
-				this.sendPacket(userNamePacket);
-				this.sendPacket(userColorPacket);
-				//this.sendPacket(userImagePacket); // Null here
-			}
-		}
-
-		
-		while(socket != null && !socket.isClosed()){
+		while(socket != null && !socket.isClosed() && socket.isConnected()){
 			try{
 				PacketType packetType = PacketType.valueOf(dataInputStream.readUTF()); // The PacketType is always sent first
 				switch(packetType){

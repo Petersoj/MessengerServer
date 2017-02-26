@@ -42,13 +42,11 @@ public class ServerConnection extends Thread {
 		this.closeServer();
 	}
 	
-	public void sendPacketToClients(Packet packet, MessengerClient... excludedClients){
+	public void sendPacketToClients(Packet packet, MessengerClient excludedClient){
 		for(MessengerClient serverUser : this.messengerClients){
-			for(MessengerClient excluded : excludedClients){
-				if(serverUser.getClientID() != excluded.getClientID()){
-					System.out.println("Sent packet " + packet.getPacketType().name());
-					serverUser.getClientConnection().sendPacket(packet);
-				}
+			if(serverUser.getClientID() != excludedClient.getClientID()){
+				Debug.consoleLog("Sent packet " + packet.getPacketType().name());
+				serverUser.getClientConnection().sendPacket(packet);
 			}
 		}
 	}

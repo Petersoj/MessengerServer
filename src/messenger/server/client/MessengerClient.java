@@ -20,7 +20,7 @@ public class MessengerClient {
 	
 	public MessengerClient(MessengerServer messengerServer){
 		this.messengerServer = messengerServer;
-		this.clientID = currentClientID++;
+		this.clientID = ++currentClientID;
 	}
 	
 	public void acceptConnection(Socket socket){
@@ -28,17 +28,12 @@ public class MessengerClient {
 		this.clientConnection.start();
 	}
 	
-	
 	public ClientConnection getClientConnection(){
 		return clientConnection;
 	}
 	
 	public int getClientID() {
 		return clientID;
-	}
-
-	public void setClientID(int clientID) {
-		this.clientID = clientID;
 	}
 
 	public String getUserName() {
