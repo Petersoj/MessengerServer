@@ -14,13 +14,13 @@ public class PacketMessage extends Packet {
 	private String message;
 
 	public PacketMessage() {
-		super(PacketType.MESSAGE);
-		this.message = "";
+		this(PacketMessageType.MESSAGE);
 	}
 	
 	public PacketMessage(PacketMessageType packetMessageType) {
-		this();
+		super(PacketType.MESSAGE);
 		this.packetMessageType = packetMessageType;
+		this.message = "";
 	}
 	
 	@Override

@@ -30,8 +30,8 @@ public class ServerConnection extends Thread {
 		while(this.serverSocket != null && !this.serverSocket.isClosed() && this.serverSocket.isBound()){
 			try {
 				MessengerClient messengerClient = new MessengerClient(messengerServer);
-				messengerClient.acceptConnection(serverSocket.accept());
 				this.messengerClients.add(messengerClient);
+				messengerClient.acceptConnection(serverSocket.accept());
 			}catch(Exception e){
 				if(!e.getMessage().equals("Socket closed")){
 					Debug.consoleLog(e);
