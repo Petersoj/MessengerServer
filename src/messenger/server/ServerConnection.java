@@ -32,8 +32,8 @@ public class ServerConnection extends Thread {
 			try {
 				Socket clientSocket = serverSocket.accept();
 				MessengerClient messengerClient = new MessengerClient(messengerServer);
-				messengerClient.acceptConnection(clientSocket);
 				this.messengerClients.add(messengerClient);
+				messengerClient.acceptConnection(clientSocket);
 			}catch(Exception e){
 				if(!e.getMessage().equals("Socket closed")){
 					Debug.consoleLog(e);

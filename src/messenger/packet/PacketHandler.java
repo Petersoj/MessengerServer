@@ -2,7 +2,6 @@ package messenger.packet;
 
 import java.awt.image.BufferedImage;
 
-import messenger.controller.Debug;
 import messenger.packet.packet.PacketMessage;
 import messenger.packet.packet.PacketMessage.PacketMessageType;
 import messenger.packet.packet.PacketUser;
@@ -34,7 +33,6 @@ public class PacketHandler {
 			sendingPacketMessage.setMessage(message);
 			
 			messengerServer.getServerConnection().sendPacketToClients(sendingPacketMessage, messengerClient);
-			Debug.consoleLog("Send packet to clients");
 		}else if(packetMessageType == PacketMessageType.FILE_NOTIFIER){
 			// The client should never send this PacketMessageType
 		}
@@ -84,10 +82,9 @@ public class PacketHandler {
 					}
 				}
 			}
-			
 		}else if(packetUserType == PacketUserType.COLOR){
 			String userColor = packetUser.getUserColor();
-			System.out.println("Recieved Color");
+			
 			if(userColor == null || userColor.equals("")){ // Just incase a client sent a non-valid color.
 				userColor = "RED";
 			}
@@ -99,12 +96,10 @@ public class PacketHandler {
 			sendingPacketUser.setUserColor(userColor);
 			
 			messengerServer.getServerConnection().sendPacketToClients(sendingPacketUser, messengerClient);
-			System.out.println("END Color");
 		}else if(packetUserType == PacketUserType.IMAGE_ICON){
 			BufferedImage userImage = packetUser.getUserImage();
-			System.out.println("recieved image");
+			
 			if(userImage == null){ // We could just send some random image, but nah.
-				Debug.consoleLog("User image was null");
 				return;
 			}
 			
@@ -115,8 +110,6 @@ public class PacketHandler {
 			sendingPacketUser.setUserImage(userImage);
 			
 			messengerServer.getServerConnection().sendPacketToClients(sendingPacketUser, messengerClient);
-			
-			System.out.println("END Image");
 		}else if(packetUserType == PacketUserType.LEAVE){
 			// The client should never send this.
 		}
