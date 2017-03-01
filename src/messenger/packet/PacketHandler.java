@@ -53,6 +53,14 @@ public class PacketHandler {
 				userName = userName.substring(0, 20);
 			}
 			
+			messengerClient.setUserName(userName);
+			
+			PacketUser sendingPacketUser = new PacketUser(PacketUserType.USERNAME);
+			sendingPacketUser.setUserID(messengerClient.getClientID());
+			sendingPacketUser.setUserName(userName);
+			
+			messengerServer.getServerConnection().sendPacketToClients(sendingPacketUser, messengerClient);
+			
 			if(messengerClient.getUserImage() == null){ // This means the client sent this packet for the first time aka bonjour
 				for(MessengerClient otherServerUser : messengerClient.getMessengerServer().getServerConnection().getMessengerClients()){
 					if(otherServerUser.getClientID() != messengerClient.getClientID()){
@@ -77,16 +85,9 @@ public class PacketHandler {
 				}
 			}
 			
-			messengerClient.setUserName(userName);
-			
-			PacketUser sendingPacketUser = new PacketUser(PacketUserType.USERNAME);
-			sendingPacketUser.setUserID(messengerClient.getClientID());
-			sendingPacketUser.setUserName(userName);
-			
-			messengerServer.getServerConnection().sendPacketToClients(sendingPacketUser, messengerClient);
 		}else if(packetUserType == PacketUserType.COLOR){
 			String userColor = packetUser.getUserColor();
-			
+			System.out.println("Recieved Color");
 			if(userColor == null || userColor.equals("")){ // Just incase a client sent a non-valid color.
 				userColor = "RED";
 			}
@@ -98,9 +99,10 @@ public class PacketHandler {
 			sendingPacketUser.setUserColor(userColor);
 			
 			messengerServer.getServerConnection().sendPacketToClients(sendingPacketUser, messengerClient);
+			System.out.println("END Color");
 		}else if(packetUserType == PacketUserType.IMAGE_ICON){
 			BufferedImage userImage = packetUser.getUserImage();
-			
+			System.out.println("recieved image");
 			if(userImage == null){ // We could just send some random image, but nah.
 				Debug.consoleLog("User image was null");
 				return;
@@ -113,6 +115,8 @@ public class PacketHandler {
 			sendingPacketUser.setUserImage(userImage);
 			
 			messengerServer.getServerConnection().sendPacketToClients(sendingPacketUser, messengerClient);
+			
+			System.out.println("END Image");
 		}else if(packetUserType == PacketUserType.LEAVE){
 			// The client should never send this.
 		}

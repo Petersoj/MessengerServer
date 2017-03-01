@@ -64,7 +64,6 @@ public class ClientConnection extends Thread {
 	public void sendPacket(Packet packet){
 		try{
 			packet.writeContent(dataOutputStream);
-			dataOutputStream.flush();
 		}catch(Exception e){
 			e.printStackTrace();
 		}

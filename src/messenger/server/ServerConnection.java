@@ -1,6 +1,7 @@
 package messenger.server;
 
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import messenger.controller.Debug;
@@ -29,9 +30,10 @@ public class ServerConnection extends Thread {
 		
 		while(this.serverSocket != null && !this.serverSocket.isClosed() && this.serverSocket.isBound()){
 			try {
+				Socket clientSocket = serverSocket.accept();
 				MessengerClient messengerClient = new MessengerClient(messengerServer);
+				messengerClient.acceptConnection(clientSocket);
 				this.messengerClients.add(messengerClient);
-				messengerClient.acceptConnection(serverSocket.accept());
 			}catch(Exception e){
 				if(!e.getMessage().equals("Socket closed")){
 					Debug.consoleLog(e);
@@ -45,7 +47,6 @@ public class ServerConnection extends Thread {
 	public void sendPacketToClients(Packet packet, MessengerClient excludedClient){
 		for(MessengerClient serverUser : this.messengerClients){
 			if(serverUser.getClientID() != excludedClient.getClientID()){
-				Debug.consoleLog("Sent packet " + packet.getPacketType().name());
 				serverUser.getClientConnection().sendPacket(packet);
 			}
 		}

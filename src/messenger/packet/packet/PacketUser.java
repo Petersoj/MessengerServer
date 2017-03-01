@@ -1,15 +1,12 @@
 package messenger.packet.packet;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import messenger.packet.Packet;
+import messenger.util.Utils;
 
 public class PacketUser extends Packet {
 
@@ -28,7 +25,7 @@ public class PacketUser extends Packet {
 		super(PacketType.USER);
 		this.packetUserType = packetUserType;
 		this.userName = "";
-		this.userColor = "RED";
+		this.userColor = "BLUE";
 	}
 
 	@Override
@@ -43,7 +40,12 @@ public class PacketUser extends Packet {
 		}else if(packetUserType == PacketUserType.COLOR){
 			dataOutputStream.writeUTF(userColor);
 		}else if(packetUserType == PacketUserType.IMAGE_ICON){
-			ImageIO.write(userImage, "PNG", ImageIO.createImageOutputStream(new BufferedOutputStream(dataOutputStream)));
+			
+			byte[] imageBytes = Utils.bufferedImageToBytes(userImage, "png");
+			dataOutputStream.writeInt(imageBytes.length);
+			dataOutputStream.write(imageBytes, 0, imageBytes.length);
+			
+			//ImageIO.write(userImage, "png", ImageIO.createImageOutputStream(dataOutputStream));
 		}
 	}
 
@@ -56,7 +58,13 @@ public class PacketUser extends Packet {
 		}else if(packetUserType == PacketUserType.COLOR){
 			this.userColor = dataInputStream.readUTF();
 		}else if(packetUserType == PacketUserType.IMAGE_ICON){
-			this.userImage = ImageIO.read(ImageIO.createImageInputStream(new BufferedInputStream(dataInputStream)));
+			
+			int imageByteSize = dataInputStream.readInt();
+			byte[] imageBytes = new byte[imageByteSize]; 
+			dataInputStream.read(imageBytes, 0, imageBytes.length);
+			this.userImage = Utils.bytesToBufferedImage(imageBytes);
+			
+			//this.userImage = ImageIO.read(ImageIO.createImageInputStream(dataInputStream));
 		}
 	}
 	
