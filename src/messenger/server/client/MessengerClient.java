@@ -22,7 +22,7 @@ public class MessengerClient {
 		this.clientID = currentClientID++;
 		
 		this.userName = "";
-		this.userColor = MessengerColor.BLUE;
+		this.userColor = null; // This is used for clients who have joined for the first time
 	}
 	
 	public void acceptConnection(Socket socket){
