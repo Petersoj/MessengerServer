@@ -5,11 +5,8 @@ import java.io.DataOutputStream;
 import java.net.Socket;
 
 import messenger.controller.Debug;
-import messenger.packet.Packet;
-import messenger.packet.Packet.PacketType;
 import messenger.packet.PacketHandler;
-import messenger.packet.packet.PacketMessage;
-import messenger.packet.packet.PacketUser;
+import messenger.packet.PacketMessage;
 
 public class ClientConnection extends Thread {
 	
@@ -37,22 +34,11 @@ public class ClientConnection extends Thread {
 		
 		while(socket != null && !socket.isClosed() && socket.isConnected()){
 			try{
-				PacketType packetType = PacketType.valueOf(dataInputStream.readUTF()); // The PacketType is always sent first
-				switch(packetType){
-					case MESSAGE:
-						PacketMessage packetMessage = new PacketMessage();
-						packetMessage.readContent(dataInputStream);
-						packetHandler.handlePacketMessage(packetMessage);
-						break;
-					case FILE:
-						
-						break;
-					case USER:
-						PacketUser packetUser = new PacketUser();
-						packetUser.readContent(dataInputStream);
-						packetHandler.handlePacketUser(packetUser);
-						break;
-				}
+				
+				PacketMessage packetMessage = new PacketMessage();
+				packetMessage.readContent(dataInputStream);
+				packetHandler.handlePacketMessage(packetMessage);
+				
 			}catch(Exception e){
 				e.printStackTrace();
 				this.closeConnection(); // Error happened and that should never happen ;)
@@ -60,15 +46,15 @@ public class ClientConnection extends Thread {
 		}
 		this.closeConnection();
 	}
-	
-	public void sendPacket(Packet packet){
-		try{
-			packet.writeContent(dataOutputStream);
-		}catch(Exception e){
-			e.printStackTrace();
+
+	public void sendPacketMessage(PacketMessage packetMessage){
+		try {
+			packetMessage.writeContent(dataOutputStream);
+		}catch(Exception e) {
+			Debug.presentError("Sending packet", e);
 		}
 	}
-	
+
 	public void closeConnection(){
 		try{
 			if(socket != null && socket.isConnected()){

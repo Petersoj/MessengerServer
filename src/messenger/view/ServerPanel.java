@@ -14,6 +14,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
 
 import messenger.controller.DataController;
+import messenger.server.client.MessengerClient;
 
 public class ServerPanel extends JPanel {
 	
@@ -118,6 +119,10 @@ public class ServerPanel extends JPanel {
 	}
 	
 	public void addUser(){
+		
+	}
+	
+	public void removeUser(MessengerClient messengerClient){
 		
 	}
 }

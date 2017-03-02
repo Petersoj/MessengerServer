@@ -5,7 +5,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import messenger.controller.Debug;
-import messenger.packet.Packet;
 import messenger.server.client.MessengerClient;
 
 public class ServerConnection extends Thread {
@@ -44,14 +43,6 @@ public class ServerConnection extends Thread {
 		this.closeServer();
 	}
 	
-	public void sendPacketToClients(Packet packet, MessengerClient excludedClient){
-		for(MessengerClient serverUser : this.messengerClients){
-			if(serverUser.getClientID() != excludedClient.getClientID()){
-				serverUser.getClientConnection().sendPacket(packet);
-			}
-		}
-	}
-	
 	public MessengerClient getClientByID(int clientID){
 		for(MessengerClient messengerClient : messengerClients){
 			if(messengerClient.getClientID() == clientID){
@@ -59,6 +50,19 @@ public class ServerConnection extends Thread {
 			}
 		}
 		return null;
+	}
+	
+	public MessengerClient getClientByName(String userName){
+		for(MessengerClient messengerClient : messengerClients){
+			if(messengerClient.getUserName() == userName){
+				return messengerClient;
+			}
+		}
+		return null;
+	}
+	
+	public void sendPacketToClients(){
+		
 	}
 	
 	public void closeServer(){

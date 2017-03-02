@@ -1,9 +1,9 @@
 package messenger.server.client;
 
-import java.awt.image.BufferedImage;
 import java.net.Socket;
 
 import messenger.server.MessengerServer;
+import messenger.util.MessengerColor;
 
 public class MessengerClient {
 	
@@ -15,12 +15,14 @@ public class MessengerClient {
 	private ClientConnection clientConnection;
 	
 	private String userName;
-	private String userColor;
-	private BufferedImage userImage;
+	private MessengerColor userColor;
 	
 	public MessengerClient(MessengerServer messengerServer){
 		this.messengerServer = messengerServer;
-		this.clientID = ++currentClientID;
+		this.clientID = currentClientID++;
+		
+		this.userName = "";
+		this.userColor = MessengerColor.BLUE;
 	}
 	
 	public void acceptConnection(Socket socket){
@@ -44,20 +46,12 @@ public class MessengerClient {
 		this.userName = userName;
 	}
 
-	public String getUserColor() {
+	public MessengerColor getUserColor() {
 		return userColor;
 	}
 
-	public void setUserColor(String userColor) {
+	public void setUserColor(MessengerColor userColor) {
 		this.userColor = userColor;
-	}
-
-	public BufferedImage getUserImage() {
-		return userImage;
-	}
-
-	public void setUserImage(BufferedImage userImage) {
-		this.userImage = userImage;
 	}
 
 	public MessengerServer getMessengerServer(){
