@@ -1,12 +1,9 @@
 package messenger.view;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -33,7 +30,6 @@ public class ServerPanel extends JPanel {
 	private DefaultListModel<MessengerClient> userListModel;
 	private JList<MessengerClient> userList;
 	private JScrollPane userListScrollPane;
-	private JButton kickButton;
 	
 	public ServerPanel(ServerFrame serverFrame){
 		super();
@@ -50,8 +46,6 @@ public class ServerPanel extends JPanel {
 		this.userListModel = new DefaultListModel<MessengerClient>();
 		this.userList = new JList<MessengerClient>(userListModel);
 		this.userListScrollPane = new JScrollPane(userList);
-		
-		this.kickButton = new JButton("Kick User");
 		
 		this.setupComponents();
 		this.setupPanel();
@@ -77,8 +71,6 @@ public class ServerPanel extends JPanel {
 		this.userList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		this.userList.setLayoutOrientation(JList.VERTICAL);
 		this.userListScrollPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
-		
-		this.kickButton.setFont(dataController.getVerdanaFont());
 	}
 
 	private void setupPanel(){
@@ -87,7 +79,6 @@ public class ServerPanel extends JPanel {
 		this.add(consoleScrollPane);
 		this.add(userListLabel);
 		this.add(userListScrollPane);
-		this.add(kickButton);
 		
 		this.setBackground(Color.WHITE);
 	}
@@ -101,29 +92,16 @@ public class ServerPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.SOUTH, consoleLabel, -10, SpringLayout.NORTH, consoleScrollPane);
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, consoleLabel, 0, SpringLayout.HORIZONTAL_CENTER, consoleScrollPane);
 		
-		springLayout.putConstraint(SpringLayout.SOUTH, kickButton, 0, SpringLayout.SOUTH, consoleScrollPane);
-		
 		springLayout.putConstraint(SpringLayout.NORTH, userListScrollPane, 0, SpringLayout.NORTH, consoleScrollPane);
-		springLayout.putConstraint(SpringLayout.SOUTH, userListScrollPane, -10, SpringLayout.NORTH, kickButton);
+		springLayout.putConstraint(SpringLayout.SOUTH, userListScrollPane, 0, SpringLayout.SOUTH, consoleScrollPane);
 		springLayout.putConstraint(SpringLayout.EAST, userListScrollPane, -20, SpringLayout.EAST, this);
 		springLayout.putConstraint(SpringLayout.WEST, userListScrollPane, 40, SpringLayout.EAST, consoleScrollPane);
 
 		springLayout.putConstraint(SpringLayout.SOUTH, userListLabel, 0, SpringLayout.SOUTH, consoleLabel);
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, userListLabel, 0, SpringLayout.HORIZONTAL_CENTER, userListScrollPane);
-
-		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, kickButton, 0, SpringLayout.HORIZONTAL_CENTER, userListScrollPane);
 	}
 	
 	private void setupListeners(){
-		this.kickButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				MessengerClient selectedUser = userList.getSelectedValue();
-				if(selectedUser != null){
-					selectedUser.getClientConnection().closeConnection();
-				}
-			}
-		});
 		this.userList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
