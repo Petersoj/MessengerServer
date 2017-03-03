@@ -2,11 +2,16 @@ package messenger.server.client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.net.Socket;
+import java.net.SocketException;
+
+import javax.swing.SwingUtilities;
 
 import messenger.controller.Debug;
 import messenger.packet.PacketHandler;
 import messenger.packet.PacketMessage;
+import messenger.util.MessengerColor;
 
 public class ClientConnection extends Thread {
 	
@@ -39,12 +44,15 @@ public class ClientConnection extends Thread {
 				packetMessage.readContent(dataInputStream);
 				packetHandler.handlePacketMessage(packetMessage);
 				
+			}catch(SocketException e){
+				this.closeConnection();
+			}catch(EOFException e){
+				this.closeConnection();
 			}catch(Exception e){
-				e.printStackTrace();
+				Debug.consoleLog(e);
 				this.closeConnection(); // Error happened and that should never happen ;)
 			}
 		}
-		this.closeConnection();
 	}
 
 	public void sendPacketMessage(PacketMessage packetMessage){
@@ -65,5 +73,14 @@ public class ClientConnection extends Thread {
 		}catch(Exception e){
 			Debug.consoleLog(e);
 		}
+		Debug.consoleLog("User \'" + messengerClient.getUserName() + "\' has left.");
+		
+		SwingUtilities.invokeLater(() -> {
+			messengerClient.getMessengerServer().getServerController().getServerFrame().getServerPanel().removeUser(messengerClient);
+		});
+		
+		this.messengerClient.getMessengerServer().getServerConnection().getMessengerClients().remove(messengerClient);
+		PacketMessage leaveMessage = new PacketMessage(messengerClient.getUserName(), MessengerColor.BLUE, "server-userleave");
+		this.messengerClient.getMessengerServer().getServerConnection().sendPacketToClients(leaveMessage, messengerClient);
 	}
 }

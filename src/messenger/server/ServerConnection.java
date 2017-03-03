@@ -1,7 +1,10 @@
 package messenger.server;
 
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import messenger.controller.Debug;
@@ -25,7 +28,14 @@ public class ServerConnection extends Thread {
 		try {
 			this.serverSocket = new ServerSocket(messengerServer.getServerController().getDataController().getServerPort());
 		}catch(Exception e){
-			Debug.presentError("ServerConnection thread", e);
+			Debug.consoleLog(e);
+		}
+		
+		Debug.consoleLog("Started listening on port " + messengerServer.getServerController().getDataController().getServerPort());
+		try {
+			Debug.consoleLog("Your local IP Address is " + InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e1) {
+			Debug.consoleLog("Don't know your local IP Address!");
 		}
 		
 		while(this.serverSocket != null && !this.serverSocket.isClosed() && this.serverSocket.isBound()){
@@ -34,14 +44,13 @@ public class ServerConnection extends Thread {
 				MessengerClient messengerClient = new MessengerClient(messengerServer);
 				this.messengerClients.add(messengerClient);
 				messengerClient.acceptConnection(clientSocket);
+			}catch(SocketException e){
+				this.closeServer();
 			}catch(Exception e){
-				if(!e.getMessage().equals("Socket closed")){
-					Debug.consoleLog(e);
-					this.closeServer();
-				}
+				Debug.consoleLog(e);
+				this.closeServer();
 			}
 		}
-		this.closeServer();
 	}
 	
 	public MessengerClient getClientByID(int clientID){
@@ -52,18 +61,9 @@ public class ServerConnection extends Thread {
 		}
 		return null;
 	}
-	
-	public MessengerClient getClientByName(String userName){
-		for(MessengerClient messengerClient : messengerClients){
-			if(messengerClient.getUserName() == userName){
-				return messengerClient;
-			}
-		}
-		return null;
-	}
-	
+
 	public void sendPacketToClients(PacketMessage packetMessage, MessengerClient excludedClient){
-		for(MessengerClient serverUser : this.messengerClients){
+		for(MessengerClient serverUser : messengerClients){
 			if(serverUser.getClientID() != excludedClient.getClientID()){
 				serverUser.getClientConnection().sendPacketMessage(packetMessage);
 			}

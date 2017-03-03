@@ -1,5 +1,8 @@
 package messenger.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -25,7 +28,9 @@ public class Debug {
 	
 	public static void consoleLog(String message){
 		SwingUtilities.invokeLater(() -> {
-			serverPanelInstance.addMessageToConsole(message);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
+			Date currentDate = new Date(System.currentTimeMillis());
+			serverPanelInstance.addMessageToConsole("[" + dateFormat.format(currentDate) + "] " + message + "\n");
 		});
 	}
 	

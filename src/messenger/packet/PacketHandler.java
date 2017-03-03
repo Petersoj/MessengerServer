@@ -1,5 +1,8 @@
 package messenger.packet;
 
+import javax.swing.SwingUtilities;
+
+import messenger.controller.Debug;
 import messenger.server.MessengerServer;
 import messenger.server.client.MessengerClient;
 import messenger.util.MessengerColor;
@@ -28,12 +31,24 @@ public class PacketHandler {
 					messengerClient.getClientConnection().sendPacketMessage(serverUserJoinPacket);
 				}
 			}
+			
+			SwingUtilities.invokeLater(() -> {
+				messengerServer.getServerController().getServerFrame().getServerPanel().addUser(messengerClient);
+			});
+			
+			Debug.consoleLog("User \'" + messengerClient.getUserName() + "\' has joined.");
 		}else{
 			messengerClient.setUserName(packetMessage.getUserName());
 			messengerClient.setUserColor(packetMessage.getUserColor());
 			
 			PacketMessage sendingPacketMessage = new PacketMessage(packetMessage.getUserName(), packetMessage.getUserColor(), packetMessage.getMessage());
 			messengerServer.getServerConnection().sendPacketToClients(sendingPacketMessage, messengerClient);
+		}
+		
+		if(packetMessage.getUserName() != null){
+			SwingUtilities.invokeLater(() -> {
+				messengerServer.getServerController().getServerFrame().getServerPanel().updateUsername(messengerClient);
+			});
 		}
 	}
 	

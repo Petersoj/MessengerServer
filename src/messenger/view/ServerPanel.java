@@ -1,6 +1,8 @@
 package messenger.view;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -12,6 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import messenger.controller.DataController;
 import messenger.server.client.MessengerClient;
@@ -26,8 +30,8 @@ public class ServerPanel extends JPanel {
 	private JLabel userListLabel;
 	private JTextArea consoleTextArea;
 	private JScrollPane consoleScrollPane;
-	private DefaultListModel<String> userListModel;
-	private JList<String> userList;
+	private DefaultListModel<MessengerClient> userListModel;
+	private JList<MessengerClient> userList;
 	private JScrollPane userListScrollPane;
 	private JButton kickButton;
 	
@@ -43,8 +47,8 @@ public class ServerPanel extends JPanel {
 		this.consoleTextArea = new JTextArea();
 		this.consoleScrollPane = new JScrollPane(consoleTextArea);
 		
-		this.userListModel = new DefaultListModel<String>();
-		this.userList = new JList<String>(userListModel);
+		this.userListModel = new DefaultListModel<MessengerClient>();
+		this.userList = new JList<MessengerClient>(userListModel);
 		this.userListScrollPane = new JScrollPane(userList);
 		
 		this.kickButton = new JButton("Kick User");
@@ -91,7 +95,7 @@ public class ServerPanel extends JPanel {
 	private void setupLayout(){
 		springLayout.putConstraint(SpringLayout.NORTH, consoleScrollPane, 50, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, consoleScrollPane, -20, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, consoleScrollPane, 60, SpringLayout.HORIZONTAL_CENTER, this);
+		springLayout.putConstraint(SpringLayout.EAST, consoleScrollPane, 40, SpringLayout.HORIZONTAL_CENTER, this);
 		springLayout.putConstraint(SpringLayout.WEST, consoleScrollPane, 20, SpringLayout.WEST, this);
 		
 		springLayout.putConstraint(SpringLayout.SOUTH, consoleLabel, -10, SpringLayout.NORTH, consoleScrollPane);
@@ -111,18 +115,40 @@ public class ServerPanel extends JPanel {
 	}
 	
 	private void setupListeners(){
-		
+		this.kickButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MessengerClient selectedUser = userList.getSelectedValue();
+				if(selectedUser != null){
+					selectedUser.getClientConnection().closeConnection();
+				}
+			}
+		});
+		this.userList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				MessengerClient selectedUser = userList.getSelectedValue();
+				if(selectedUser != null){
+					userList.setSelectionBackground(selectedUser.getUserColor().getColor());
+				}
+			}
+		});
 	}
 	
 	public void addMessageToConsole(String message){
 		this.consoleTextArea.append(message);
 	}
 	
-	public void addUser(){
-		
+	public void addUser(MessengerClient messengerClient){
+		this.userListModel.addElement(messengerClient);
+	}
+	
+	public void updateUsername(MessengerClient messengerClient){
+		this.removeUser(messengerClient);
+		this.addUser(messengerClient);
 	}
 	
 	public void removeUser(MessengerClient messengerClient){
-		
+		this.userListModel.removeElement(messengerClient);
 	}
 }

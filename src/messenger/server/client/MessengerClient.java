@@ -19,6 +19,7 @@ public class MessengerClient {
 	
 	public MessengerClient(MessengerServer messengerServer){
 		this.messengerServer = messengerServer;
+		
 		this.clientID = currentClientID++;
 		
 		this.userName = "";
@@ -28,6 +29,11 @@ public class MessengerClient {
 	public void acceptConnection(Socket socket){
 		this.clientConnection = new ClientConnection(this, socket);
 		this.clientConnection.start();
+	}
+	
+	@Override
+	public String toString() {
+		return this.userName;
 	}
 	
 	public ClientConnection getClientConnection(){
